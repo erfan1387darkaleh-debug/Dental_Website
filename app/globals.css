@@ -1,0 +1,216 @@
+@import "tailwindcss";
+
+/*
+ * حالت تاریک مبتنی بر کلاس: وقتی <html> کلاس dark داشته باشد،
+ * واریانت dark: فعال می‌شود (کلاس را اسکریپت کوچک در layout.tsx
+ * پیش از اولین رندر تنظیم می‌کند تا «فلش تم» رخ ندهد).
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /*
+   * فونت فارسی «وزیرمتن» — به‌صورت self-hosted با next/font/local بارگذاری
+   * می‌شود (فایل در app/fonts قرار دارد) و متغیر --font-vazirmatn از
+   * همین‌جا به Tailwind معرفی شده است.
+   */
+  --font-sans: var(--font-vazirmatn), "Vazirmatn", ui-sans-serif, system-ui,
+    -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+
+  /*
+   * پالت رنگی ملایم و پزشکی (سبزآبی — teal).
+   * رنگ اصلی دکمه‌ها و تاکیدها primary-700 است تا کنتراست کافی با سفید داشته باشد.
+   * این پالت در هر دو حالت روشن و تاریک ثابت است (هویت برند).
+   */
+  --color-primary-50: #f0fdfa;
+  --color-primary-100: #ccfbf1;
+  --color-primary-200: #99f6e4;
+  --color-primary-300: #5eead4;
+  --color-primary-400: #2dd4bf;
+  --color-primary-500: #14b8a6;
+  --color-primary-600: #0d9488;
+  --color-primary-700: #0f766e;
+  --color-primary-800: #115e59;
+  --color-primary-900: #134e4a;
+  --color-primary-950: #042f2e;
+
+  /* سایه نرم برای کارت‌ها و پنل‌ها */
+  --shadow-soft: 0 1px 2px 0 rgb(15 23 42 / 0.04),
+    0 10px 30px -12px rgb(15 23 42 / 0.12);
+}
+
+/*
+ * توکن‌های معنایی تم — مقادیر با متغیرهای :root/.dark بالا تغییر می‌کنند
+ * تا همه‌ی کلاس‌های معنایی (bg-canvas، text-muted و...) در هر دو حالت
+ * به‌روز شوند. برای تغییر جهت طراحی آینده کافی است همین متغیرها را ویرایش کنید.
+ */
+@theme inline {
+  /* پس‌زمینه صفحه، سطح کارت‌ها و بخش‌های ته‌رنگ */
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-tint: var(--tint);
+
+  /* خط‌های جداکننده و حاشیه‌ها */
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  /* متن‌ها: تیتر، متن اصلی، متن ثانویه و کم‌اهمیت */
+  --color-heading: var(--heading);
+  --color-body: var(--body);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+
+  /* تاکیدهای سبزآبی برند — در حالت تاریک روشن‌تر برای حفظ کنتراست */
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-hover: var(--accent-hover);
+}
+
+/* حالت روشن — دقیقاً همان رنگ‌های طراحی فعلی */
+:root {
+  color-scheme: light;
+
+  --canvas: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f8fafc;
+  --tint: #f0fdfa;
+
+  --line: #f1f5f9;
+  --line-strong: #e2e8f0;
+
+  --heading: #0f172a;
+  --body: #334155;
+  --muted: #475569;
+  --subtle: #64748b;
+
+  --accent: #0f766e;
+  --accent-strong: #115e59;
+  --accent-hover: #134e4a;
+}
+
+/*
+ * حالت تاریک — سرمه‌ای/ذغالی بسیار تیره (بدون مشکی خالص) با همان
+ * لهجه سبزآبی برند؛ کدر و آرام، بدون نئون و درخشش اضافی.
+ */
+.dark {
+  color-scheme: dark;
+
+  --canvas: #0b131f;
+  --surface: #121e2e;
+  --surface-2: #0e1725;
+  --tint: #0e2431;
+
+  --line: #1d2b40;
+  --line-strong: #2a3c55;
+
+  --heading: #e9eef7;
+  --body: #c3d0df;
+  --muted: #9aabc0;
+  --subtle: #8295ab;
+
+  --accent: #2dd4bf;
+  --accent-strong: #5eead4;
+  --accent-hover: #99f6e4;
+}
+
+/* اسکرول نرم برای لینک‌های داخل صفحه (مثل «تماس با ما») */
+html {
+  scroll-behavior: smooth;
+  /* پس‌زمینه خود <html> هم تم‌آگاه باشد (مثلاً هنگام overscroll) */
+  background-color: var(--canvas);
+}
+
+::selection {
+  background-color: var(--color-primary-200);
+  color: var(--color-primary-950);
+}
+
+.dark ::selection {
+  background-color: var(--color-primary-800);
+  color: var(--color-primary-50);
+}
+
+/* ── انیمیشن‌های ملایم ─────────────────────────────────────────── */
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* ورود اولیه عناصر هیرو */
+.animate-fade-up {
+  animation: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* شنارَوی آرام کارت‌های شناور روی تصویر هیرو */
+.animate-float {
+  animation: float-soft 7s ease-in-out infinite;
+}
+
+/*
+ * ظاهر شدن تدریجی بخش‌ها هنگام اسکرول — توسط کامپوننت <Reveal>
+ * با IntersectionObserver کنترل می‌شود (attribute داده‌ای data-visible).
+ */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal[data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/*
+ * گذار نرم اما کوتاه هنگام تغییر تم — کلاس theme-anim فقط برای چند
+ * صد میلی‌ثانیه هنگام کلیک روی دکمه تغییر تم روی <html> گذاشته و
+ * برداشته می‌شود؛ در بارگذاری اولیه هیچ گذاری اجرا نمی‌شود.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-anim,
+  html.theme-anim *,
+  html.theme-anim *::before,
+  html.theme-anim *::after {
+    transition: background-color 220ms ease, border-color 220ms ease,
+      color 220ms ease, fill 220ms ease, stroke 220ms ease,
+      box-shadow 220ms ease !important;
+    transition-delay: 0ms !important;
+  }
+}
+
+/* ── احترام به تنظیمات «کاهش حرکت» کاربران ────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .animate-fade-up,
+  .animate-float {
+    animation: none;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
